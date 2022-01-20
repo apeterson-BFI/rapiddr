@@ -88,8 +88,17 @@ This will take tuning to get it right
 
 ## Accelerated Model
 
-Accelerate time to pulse from Mind Lock to CLear by 60
-Accelerate time to fill pool by 60
+Provisional Plan
 
+Accelerate time to pulse from Mind Lock to Clear by 60.
+Accelerate time to fill pool by 60.
+Reduce bits to rank by 8 fold 
 
+provisional Guess play time to reach maxes: 10 years * 300 days / year * 6 hours / day = 18000 hours or 750 days of play time.
 
+Resulting in an 480-1 accelerating: 10 years @ 300/6 becomes 37.5 hours.
+Seems reasonable. 37.5 hours is still a lot of time to experience the arc, once everything is created.
+
+Adjustabke PULSE / DRAIN time.
+Adjustable BIT reqd
+Will help when there's only enough content for a blip of time at 480 scale.
