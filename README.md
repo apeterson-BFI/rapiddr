@@ -22,7 +22,7 @@ Focussed on PvE advancement experience in a (first focus) solo or (future+++) sm
 
 ## Roadmap
 
-1. Enable the barebones Barbarian hunting experience with Skill < 100 monsters to support it.
+Enable the barebones Barbarian hunting experience with Skill < 100 monsters to support it.
   1. Unit (character & monsters) statistics system  : simple start v1
     1. Statistics (slow changing attributes)
     2. Skills (faster changing attributes)
