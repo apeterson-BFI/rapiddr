@@ -24,11 +24,39 @@ Focussed on PvE advancement experience in a (first focus) solo or (future+++) sm
 
 Setup architectural elements and program basics for the server.
 
+1. SimEngine
+    - Top level system
+    - Control of Key simulation parameters
+3. Model
+    - Representation of every type DR data
+    - Representation of Global game parameters
+4. Persistence
+    - Storage and saving Model state in case of server crash
+6. AgentModel
+    - Representation of the Agent and it's capabilities.
+8. AgentView
+    - Representation of information to be sent to client.
+10. DebugView
+    - Representation of information to be sent when debugging the Model's big picture view.
+
 Setup interface between client (network wise, and special data protocol to send
+
+1. Find / Build text-based mud networking server API.
+2. Implement specific command logic to handle equipment, movement, shop interaction.
+3. Implement specific Output presentation through AgentView.
+
+use telnet, or modern networking ideas.
 
 Setup client interface with useful information.
 
-Enable the barebones Barbarian hunting experience with Skill < 100 monsters to support it.
+GUI interface designed around making textual information organization usefully.
+1. Text display area
+2. Text input area
+3. Helpful information panels / displays.
+4. Login, Logout
+5. Character interface (start new : play existing)
+
+MODEL: Enable the barebones Barbarian hunting experience with Skill < 100 monsters to support it.
   1. Unit (character & monsters) statistics system  : simple start v1
       - Statistics (slow changing attributes)
       - Skills (faster changing attributes)
