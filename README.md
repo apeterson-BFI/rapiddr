@@ -22,56 +22,56 @@ Focussed on PvE advancement experience in a (first focus) solo or (future+++) sm
 
 ## Roadmap
 
-I. Enable the barebones Barbarian hunting experience with Skill < 100 monsters to support it.
+1. Enable the barebones Barbarian hunting experience with Skill < 100 monsters to support it.
   1. Unit (character & monsters) statistics system  : simple start v1
-    a. Statistics (slow changing attributes)
-    b. Skills (faster changing attributes)
-    c. Vitals (current endurance, current health, life/death, # of respawns (orbs))
-    d. Level
-    e. Equipped Items
-    f. Stored Items
+    1. Statistics (slow changing attributes)
+    2. Skills (faster changing attributes)
+    3. Vitals (current endurance, current health, life/death, # of respawns (orbs))
+    4. Level
+    5. Equipped Items
+    6. Stored Items
   2. Equipment System : simple start v1
-    a. Body equip slots: Armor, Right Hand, Left Hand (non-weapon), container
-    b. Containers: (v1 includes unlimited container space).
+    1. Body equip slots: Armor, Right Hand, Left Hand (non-weapon), container
+    2. Containers: (v1 includes unlimited container space).
   3. Combat System : simple start v1
-    a. Attacking for different types (melee, ranged, thrown)
-    b. Benefits and drawbacks for different weapons in the same type
-    c. Advantage system (manuevering into an advantage)
-    d. Stance to determine weight of Evasion / Parry / Shield use
-    e. Multi-Opponent combat
-    f. Result tables for attack success
-    g. Defenses: Evasion, Parry and Shield
-    h. Damage Reduction for Effective Defense
-    i. Armor - flat result table reduction and proportional protection, encumerance harming evasion's effectiveness.
-    j. Determining death
+    1. Attacking for different types (melee, ranged, thrown)
+    2. Benefits and drawbacks for different weapons in the same type
+    3. Advantage system (manuevering into an advantage)
+    4. Stance to determine weight of Evasion / Parry / Shield use
+    5. Multi-Opponent combat
+    6. Result tables for attack success
+    7. Defenses: Evasion, Parry and Shield
+    8. Damage Reduction for Effective Defense
+    9. Armor - flat result table reduction and proportional protection, encumerance harming evasion's effectiveness.
+    10. Determining death
   4. Map System : simple start v1
-    a. Graph nodes and edges corresponding to compass directions and diagonals.
-    b. Interfacing with other systems at map points supported.
+    1. Graph nodes and edges corresponding to compass directions and diagonals.
+    2. Interfacing with other systems at map points supported.
   6. Monster System : simple start v1
-    a. Summoning in zones based on player presence.
-    b. Monster loot available
-    c. Designing skills, stats and equipment for <100 monsters
+    1. Summoning in zones based on player presence.
+    2. Monster loot available
+    3. Designing skills, stats and equipment for <100 monsters
   6. Loot System : simple start v1
-    a. Provide indicated loot on kill with %s.
-    b. Room for growth to full on loot system.
+    1. Provide indicated loot on kill with %s.
+    2. Room for growth to full on loot system.
   7. Experience system : simple start v1
-    a. Link attack and evade/parry/shield and armor with appropriate bits going into pools.
-    b. Gradually move bits from pools into the appropriate skill, providing gain.
-    c. Develop new Bits required to rank up formula.
-    c. Mental stats provide benefits to help increase the rate of bits going from pool to skill gain.
-    d. Combat ability provides increased ability to fill into the pool.
+    1. Link attack and evade/parry/shield and armor with appropriate bits going into pools.
+    2. Gradually move bits from pools into the appropriate skill, providing gain.
+    3. Develop new Bits required to rank up formula.
+    4. Mental stats provide benefits to help increase the rate of bits going from pool to skill gain.
+    5. Combat ability provides increased ability to fill into the pool.
   8. Create Respawn System : simple start v1
-    a. Spend time at Altar to gain respawns
-    b. Lose undispersed experience on death.
-    c. Room for future death penalties, skill loss, soul recovery, etc.
-    d. Respawn wait time.
+    1. Spend time at Altar to gain respawns
+    2. Lose undispersed experience on death.
+    3. Room for future death penalties, skill loss, soul recovery, etc.
+    4. Respawn wait time.
   9. Create Shop System : simple start v1
-    a. Locations can be marked for buying equipment / selling loot.
-    b. Locations can also be marked for increasing stats at the cost of TDP points.
-    c. Locations can also be marked for increasing level, based on meeting Leveling structure (see next)
+    1. Locations can be marked for buying equipment / selling loot.
+    2. Locations can also be marked for increasing stats at the cost of TDP points.
+    3. Locations can also be marked for increasing level, based on meeting Leveling structure (see next)
   10. Create Leveling System : simple start v1
-    a. Barbarian Only for now
-    b. Only combat skills required.
-    c. Tiered requirements structure
-    d. # ranks required in # skills of skillset.
-    e. # ranks required in certain named skills.
+    1. Barbarian Only for now
+    2. Only combat skills required.
+    3. Tiered requirements structure
+    4. # ranks required in # skills of skillset.
+    5. # ranks required in certain named skills.
