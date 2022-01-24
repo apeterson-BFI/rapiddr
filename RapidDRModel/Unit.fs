@@ -12,6 +12,15 @@
 
         member this.Statistics = statistics
 
+        member this.TDPSFree = 
+            let skfun (sk : Skill) = sk.TDPSEarned
+            let wtdps = List.sumBy skfun this.WeaponSkills.Skills
+            let atdps = List.sumBy skfun this.ArmorSkills.Skills
+            let stdps = List.sumBy skfun this.SurvivalSKills.Skills
+            let tdpsSpent = this.Statistics.TDPCost(Unit.DefaultStatistics)
+
+            wtdps + atdps + stdps - tdpsSpent
+
         member this.Pulse() = 
             this.WeaponSkills.Pulse this.Statistics.Wisdom this.Statistics.Intelligence this.Statistics.Discipline
             this.ArmorSkills.Pulse this.Statistics.Wisdom this.Statistics.Intelligence this.Statistics.Discipline

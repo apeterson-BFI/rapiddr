@@ -27,10 +27,10 @@
             (1000.0 + iv + dv) / 1000.0 * bp
 
         let calcRankFromBits (bits : float) = 
-            -399.0 / 2.0 + Math.Sqrt(399.0 * 399.0 / 4.0 + 2.0 * bits)
+            -399.0 / 2.0 + Math.Sqrt(399.0 * 399.0 / 4.0 + 16.0 * bits)
 
         let calcBitsFromRank (rank : float) = 
-            rank * (rank + 399.0) / 2.0
+            rank * (rank + 399.0) / 16.0
 
         let calcPulseRate (s : SkillsetPoolParameters) (wisdom : float) =
             let w10 = Math.Log10(wisdom)

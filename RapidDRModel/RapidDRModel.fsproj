@@ -10,6 +10,7 @@
     <Compile Include="Skillset.fs" />
     <Compile Include="Attributes.fs" />
     <Compile Include="Unit.fs" />
+    <Compile Include="SimParams.fs" />
     <Compile Include="Library.fs" />
   </ItemGroup>
 
