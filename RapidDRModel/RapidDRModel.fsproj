@@ -7,6 +7,9 @@
 
   <ItemGroup>
     <Compile Include="Skill.fs" />
+    <Compile Include="Skillset.fs" />
+    <Compile Include="Attributes.fs" />
+    <Compile Include="Unit.fs" />
     <Compile Include="Library.fs" />
   </ItemGroup>
 

@@ -95,6 +95,8 @@
         member this.DesiredGainRate (gainFreq : Duration) (pulseFreq : Duration) = 
             calcDesiredGainRate this.SkillRanks this.SkillsetType gainFreq pulseFreq
 
+        new(skill : Skill) = Skill(skill.Name, 0.0, skill.SkillsetType, 0.0) 
+
         static member Primary = { poolconst = 1000.0; poolincr = 15000.0; pooldenom = 900.0; pulsebase = 0.025; pulseincr = 0.025 }
         static member Secondary = { poolconst = 850.0; poolincr = 12750.0; pooldenom = 900.0; pulsebase = 0.015; pulseincr = 0.0225 }
         static member Tertiary = { poolconst = 700.0; poolincr = 10500.0; pooldenom = 900.0; pulsebase = 0.013; pulseincr = 0.017 }        
