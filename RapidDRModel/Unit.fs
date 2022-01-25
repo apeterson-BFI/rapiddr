@@ -3,7 +3,15 @@
     open System
     open NodaTime
 
-    type Unit(weaponSkills : Skillset, armorSkills : Skillset, survivalSkills : Skillset, statistics : Attributes, vitals : Vitals, guildReqs : GuildRequirements) = 
+    type UnitType = 
+        | PC
+        | Monster
+        | NPC
+
+    type UnitCombatData = 
+        { ShieldData : ArmorData option; ArmorData : ArmorData option; WeaponData : WeaponData option; VitalData : Vitals; Statistics : Attributes; EvasionRanks : float; ParryRanks : float }
+
+    type Unit(ident : string, weaponSkills : Skillset, armorSkills : Skillset, survivalSkills : Skillset, statistics : Attributes, vitals : Vitals, guildReqs : GuildRequirements, equipped : Portrait, unitType : UnitType) = 
  
         let rec findLevelSatisfied (req : SkillRequirement) (ability : float) = 
             match req with
@@ -28,7 +36,7 @@
         let findSkillsetLevelSatisfied (sreq : SkillsetRequirement) (skills : Skillset) = 
             match sreq with
             | TopN (s, n) -> findTopNLevelSatisfied s n skills
-            | TotalN (s) -> findTotalNLevelSatisfied s skills
+            | TotalN (s) -> findTotalNLevelSatisfied s skills            
 
         member this.FindLevelFromReqs () = 
             let wlevel = findSkillsetLevelSatisfied this.GuildRequirements.weaponReq weaponSkills
@@ -59,6 +67,107 @@
         member this.Vitals = vitals
 
         member this.GuildRequirements = guildReqs
+
+        member val Equipped = equipped with get,set
+
+        member this.UnitType = unitType
+
+        member val Ident = ident with get,set
+
+        // V!: Armor goes on Torso. Shield on Left shoulder or Left hand
+        //     Weapon in right hand
+
+        member this.GetShield () = 
+            let lh = 
+                match this.Equipped.LeftHand with
+                | ArmorSlot arm ->
+                    if arm.SkillName = "Shield" then Some (arm)
+                    else None
+                | WeaponSlot _ -> None
+                | Container _ -> None
+                | Nothing -> None
+
+            let ls = 
+                match this.Equipped.LeftShoulder with
+                | ArmorSlot arm ->
+                    if arm.SkillName = "Shield" then Some (arm)
+                    else None
+                | WeaponSlot _ -> None
+                | Container _ -> None
+                | Nothing -> None
+
+            Option.orElse ls lh
+
+        member this.HasShield = 
+            this.GetShield () 
+            |> Option.isSome
+
+        member this.GetWeapon () = 
+            match this.Equipped.RightHand with
+            | ArmorSlot _ -> None
+            | WeaponSlot wp -> Some wp
+            | Container _ -> None
+            | Nothing -> None
+
+        member this.HasWeapon = 
+            match this.Equipped.RightHand with
+            | ArmorSlot _ -> false
+            | WeaponSlot _ -> true
+            | Container _ -> false
+            | Nothing -> false
+
+        member this.GetArmor () = 
+            match this.Equipped.Torso with
+            | ArmorSlot ar -> if ar.SkillName = "Shield" then None else Some ar
+            | WeaponSlot _ -> None
+            | Container _ -> None
+            | Nothing -> None
+
+        member this.HasArmor =
+            this.GetArmor()
+            |> Option.isSome
+
+        member this.Evasion
+            with get() = 
+                match this.SurvivalSKills.TryFind("Evasion") with
+                | None -> 0.0
+                | Some ev -> ev.SkillRanks
+
+        member this.Parry
+            with get() = 
+                match this.WeaponSkills.TryFind("Parry") with
+                | None -> 0.0
+                | Some p -> p.SkillRanks
+
+        member this.WeaponData () = 
+            let wsloto = this.GetWeapon ()
+
+            match wsloto with
+            | Some wslot ->
+                match this.WeaponSkills.TryFind wslot.SkillName with
+                | None -> None
+                | Some (sk : Skill) -> Some { WeaponRanks = sk.SkillRanks; Gear = wslot }
+            | None -> None
+
+        member this.ArmorData () = 
+            let asloto = this.GetArmor ()
+
+            match asloto with
+            | Some aslot ->
+                match this.ArmorSkills.TryFind aslot.SkillName with
+                | None -> None
+                | Some (sk : Skill) -> Some { ArmorRanks = sk.SkillRanks; Gear = aslot }
+            | None -> None
+
+        member this.ShieldData () = 
+            let ssloto = this.GetShield ()
+
+            match ssloto with
+            | Some sslot ->
+                match this.ArmorSkills.TryFind "Shield" with
+                | None -> None
+                | Some (sk : Skill) -> Some { ArmorRanks = sk.SkillRanks; Gear = sslot }
+            | None -> None
 
         member this.TDPSFree = 
             let skfun (sk : Skill) = sk.TDPSEarned
@@ -93,6 +202,11 @@
                     match this.SurvivalSKills.TryFind name with
                     | Some sk -> Some sk
                     | None -> None
+
+        member this.GetUnitCombatData () = 
+            { ShieldData = this.ShieldData (); ArmorData = this.ArmorData (); WeaponData = this.WeaponData (); Statistics = this.Statistics; 
+              VitalData = this.Vitals; EvasionRanks = this.Evasion; ParryRanks = this.Parry  }
+            
 
         static member DefaultStatistics = new Attributes(10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0)
 
@@ -136,14 +250,20 @@
 
         static member DefaultVitals = 
             new Vitals(100.0, 100.0, 100.0, 0.0, Alive)
-        
+
+        static member DefaultPortrait = 
+            { Back = Nothing; LeftShoulder = Nothing; RightShoulder = Nothing; LeftHand = Nothing; RightHand = Nothing;
+              Torso = Nothing }
+                
+        static member DefaultIdent = "Blank"
+            
         new(proto : Unit) = 
             let na = new Attributes(proto.Statistics)
             let wc = new Skillset(proto.WeaponSkills)
             let ac = new Skillset(proto.ArmorSkills)
             let sc = new Skillset(proto.SurvivalSKills)
 
-            Unit(wc, ac, sc, na, Unit.DefaultVitals, proto.GuildRequirements)
+            Unit(Unit.DefaultIdent, wc, ac, sc, na, Unit.DefaultVitals, proto.GuildRequirements, Unit.DefaultPortrait, proto.UnitType)
 
-        static member CreateNewBaseUnit() = Unit(Unit.DefaultWeaponSkills, Unit.DefaultArmorSkills, Unit.DefaultSurvivalSkills, Unit.DefaultStatistics, Unit.DefaultVitals, Guild.barbReqs)
+        static member CreateNewBaseUnit() = Unit(Unit.DefaultIdent, Unit.DefaultWeaponSkills, Unit.DefaultArmorSkills, Unit.DefaultSurvivalSkills, Unit.DefaultStatistics, Unit.DefaultVitals, Guild.barbReqs, Unit.DefaultPortrait, UnitType.PC)
             
