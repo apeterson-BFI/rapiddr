@@ -11,12 +11,16 @@
     <Compile Include="Attributes.fs" />
     <Compile Include="Vitals.fs" />
     <Compile Include="Guild.fs" />
+    <Compile Include="Equipment.fs" />
     <Compile Include="Unit.fs" />
+    <Compile Include="BattleContext.fs" />
     <Compile Include="SimParams.fs" />
     <Compile Include="Library.fs" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="MathNet.Numerics" Version="4.15.0" />
+    <PackageReference Include="MathNet.Numerics.FSharp" Version="4.15.0" />
     <PackageReference Include="NodaTime" Version="3.0.9" />
   </ItemGroup>
 

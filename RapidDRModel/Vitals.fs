@@ -9,13 +9,19 @@
         | Annihilated
 
     type Vitals(health : float, endurance : float, concentration : float, respawns : float, status : StatusType) = 
-        let mutable health = health
+        let mutable hpmut = health
         
+        member val HealthMax = health with get,set
+
+        member val EnduranceMax = endurance with get,set
+
+        member val ConcentrationMax = concentration with get,set
+
         member this.Health
-            with get() = health
+            with get() = hpmut
             and set(value) = 
-                health <- value
-                if health <= 0.0 then 
+                hpmut <- value
+                if value <= 0.0 then 
                     if this.Respawns <= 0.0 then this.Status <- Annihilated
                     else
                         this.Respawns <- this.Respawns - 1.0
