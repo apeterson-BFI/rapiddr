@@ -207,6 +207,29 @@
             { ShieldData = this.ShieldData (); ArmorData = this.ArmorData (); WeaponData = this.WeaponData (); Statistics = this.Statistics; 
               VitalData = this.Vitals; EvasionRanks = this.Evasion; ParryRanks = this.Parry  }
             
+        member this.UpdateMaxHealth () =
+            let newmax = 7.5 * this.Statistics.Stamina + 2.5 * this.Statistics.Strength
+            let delta = newmax - this.Vitals.HealthMax
+            
+            this.Vitals.Health <- this.Vitals.Health + delta
+            this.Vitals.HealthMax <- newmax
+
+        member this.UpdateMaxEndurance () = 
+            let newmax = 7.5 * this.Statistics.Stamina + 2.5 * this.Statistics.Discipline
+            let delta = newmax - this.Vitals.EnduranceMax
+
+            this.Vitals.Endurance <- this.Vitals.Endurance + delta
+            this.Vitals.EnduranceMax <- newmax
+
+        member this.AdjustHealth (hpDelta : float) =
+            this.Vitals.Health <- this.Vitals.Health + hpDelta
+
+        member this.AdjustEndurance (enduDelta : float) = 
+            this.Vitals.Endurance <- this.Vitals.Endurance + enduDelta
+
+        member this.TryTiring (enduDelta : float) =
+            if this.Vitals.Endurance + enduDelta < 0.0 then false
+            else this.AdjustEndurance enduDelta; true
 
         static member DefaultStatistics = new Attributes(10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0)
 

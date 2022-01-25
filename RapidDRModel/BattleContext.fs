@@ -169,5 +169,11 @@
                             match def_dset with
                             | None -> ()
                             | Some dset ->
-                                this.ResolveCombat aunit dunit att_wd def_ad dset aunit.Statistics dunit.Statistics aunit.Vitals dunit.Vitals
+                                let endu_able = aunit.TryTiring att_wd.Gear.EnduranceCost
+                                
+                                if endu_able
+                                then
+                                    this.ResolveCombat aunit dunit att_wd def_ad dset aunit.Statistics dunit.Statistics aunit.Vitals dunit.Vitals
+                                else
+                                    ()
                     | _,_ -> ()
