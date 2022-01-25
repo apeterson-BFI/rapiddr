@@ -3,7 +3,7 @@
     open System
     open NodaTime
 
-    type Unit(weaponSkills : Skillset, armorSkills : Skillset, survivalSkills : Skillset, statistics : Attributes) = 
+    type Unit(weaponSkills : Skillset, armorSkills : Skillset, survivalSkills : Skillset, statistics : Attributes, vitals : Vitals) = 
         member this.WeaponSkills = weaponSkills
 
         member this.ArmorSkills = armorSkills
@@ -11,6 +11,8 @@
         member this.SurvivalSKills = survivalSkills
 
         member this.Statistics = statistics
+
+        member this.Vitals = vitals
 
         member this.TDPSFree = 
             let skfun (sk : Skill) = sk.TDPSEarned
@@ -36,14 +38,6 @@
                     match this.SurvivalSKills.TryFind name with
                     | Some sk -> sk.Gain this.Statistics.Intelligence this.Statistics.Discipline softCapRank hardCapRank gainBits
                     | None -> ()
-
-        new(proto : Unit) = 
-            let na = new Attributes(proto.Statistics)
-            let wc = new Skillset(proto.WeaponSkills)
-            let ac = new Skillset(proto.ArmorSkills)
-            let sc = new Skillset(proto.SurvivalSKills)
-
-            Unit(wc, ac, sc, na)
 
         static member DefaultStatistics = new Attributes(10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0)
 
@@ -84,6 +78,17 @@
         static member DefaultSurvivalSkills = 
             new Skillset("Survival",
                 [new Skill("Evasion", 0.0, Skill.Secondary, 0.0)], Skill.Secondary)
+
+        static member DefaultVitals = 
+            new Vitals(100.0, 100.0, 100.0, 0.0, Alive)
         
-        static member CreateNewBaseUnit() = Unit(Unit.DefaultWeaponSkills, Unit.DefaultArmorSkills, Unit.DefaultSurvivalSkills, Unit.DefaultStatistics)
+        new(proto : Unit) = 
+            let na = new Attributes(proto.Statistics)
+            let wc = new Skillset(proto.WeaponSkills)
+            let ac = new Skillset(proto.ArmorSkills)
+            let sc = new Skillset(proto.SurvivalSKills)
+
+            Unit(wc, ac, sc, na, Unit.DefaultVitals)
+
+        static member CreateNewBaseUnit() = Unit(Unit.DefaultWeaponSkills, Unit.DefaultArmorSkills, Unit.DefaultSurvivalSkills, Unit.DefaultStatistics, Unit.DefaultVitals)
             
