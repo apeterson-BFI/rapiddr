@@ -4,7 +4,7 @@
 
     // Expect weapon SkillName in Weapon skills list
     type Weapon = 
-        { Ident : string; SkillName : string; DamageMod : float; AccuracyMod : float; }
+        { Ident : string; SkillName : string; DamageMod : float; AccuracyMod : float; EnduranceCost : float; }
 
 
     // Expect armor SkillName in Armor skills list
