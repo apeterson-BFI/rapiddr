@@ -44,3 +44,6 @@
 
         member val Status = status with get,set
 
+        member this.MaxVitals () = 
+            Vitals(this.HealthMax, this.EnduranceMax, this.ConcentrationMax, 0.0, Alive)
+

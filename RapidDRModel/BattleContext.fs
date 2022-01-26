@@ -131,6 +131,19 @@
             def_unit.Vitals.Health <- def_unit.Vitals.Health - final_dmg
             ()
 
+        member this.Join (u : Unit) = 
+            if List.exists (fun (un : Unit) -> un.Ident = u.Ident) this.Units
+            then ()
+            else
+                this.Units <- u :: this.Units
+
+        member this.Leave (u : Unit) = 
+            if List.exists (fun (un : Unit) -> un.Ident = u.Ident) this.Units
+            then this.Units <- List.filter (fun (un : Unit) -> un.Ident <> u.Ident) this.Units
+            else
+                ()
+            
+
         member this.Attack (attackerIdent : string) (defenderIdent : string)  = 
             let (aunito : Unit option) = List.tryFind (fun u -> u.Ident = attackerIdent) this.Units
             let (dunito : Unit option) = List.tryFind (fun u -> u.Ident = defenderIdent) this.Units

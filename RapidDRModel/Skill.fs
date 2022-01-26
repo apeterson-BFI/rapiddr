@@ -75,6 +75,9 @@
         member this.TDPSEarned = 
             calcTDPAccum this.SkillRanks
 
+        member this.SetRank (rank : float) =
+            this.SkillBits <- calcBitsFromRank rank
+
         member this.Pulse (wisdom : float) (intel : float) (disc : float) =
             let bp = calcPulseBits this.SkillsetType wisdom intel disc this.SkillRanks
             
