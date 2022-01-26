@@ -5,8 +5,8 @@
     type RoomContents = 
         | BattleRoom of BattleContext
         | TravelRoom
-        | Shop
-        | Guild
+        | Shop of ShopContents
+        | Guild of ShopContents
 
     type Room(neighbors : Map<string, Room>, description : string, title : string, contents : RoomContents ) = 
         member val Neighbors = neighbors with get,set

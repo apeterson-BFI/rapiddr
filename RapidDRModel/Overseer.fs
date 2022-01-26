@@ -66,21 +66,69 @@
         let (snowbeastspawn, snowbeastroom) = createMonsterRoom "Snowbeast" "Snowbeast Room" 95.0 14.0 rake snowbeastarmor None 22.0 620.0 100.0 110.0 110.0 120.0 0.05 4 sparams
 
         let westgateroom = new Room(Map [], "West Gate", "West Gate", TravelRoom)
-        let introom = new Room(Map [], "Int Training Room", "Int Training Room", Shop)
-        let wisroom = new Room(Map [], "Wis Training Room", "Wis Training Room", Shop)
-        let charoom = new Room(Map [], "Cha Training Room", "Cha Training Room", Shop)
-        let agiroom = new Room(Map [], "Agi Training Room", "Agi Training Room", Shop)
-        let refroom = new Room(Map [], "Ref Training Room", "Ref Training Room", Shop)
-        let disroom = new Room(Map [], "Dis Training Room", "Dis Training Room", Shop)
-        let strroom = new Room(Map [], "Str Training Room", "Str Training Room", Shop)
-        let staroom = new Room(Map [], "Sta Training Room", "Sta Training Room", Shop)
+        let introom = new Room(Map [], "Int Training Room", "Int Training Room", Shop (StatTrainer ("Intelligence")))
+        let wisroom = new Room(Map [], "Wis Training Room", "Wis Training Room", Shop (StatTrainer ("Wisdom")))
+        let charoom = new Room(Map [], "Cha Training Room", "Cha Training Room", Shop (StatTrainer ("Charisma")))
+        let agiroom = new Room(Map [], "Agi Training Room", "Agi Training Room", Shop (StatTrainer ("Agility")))
+        let refroom = new Room(Map [], "Ref Training Room", "Ref Training Room", Shop (StatTrainer ("Reflex")))
+        let disroom = new Room(Map [], "Dis Training Room", "Dis Training Room", Shop (StatTrainer ("Discipline")))
+        let strroom = new Room(Map [], "Str Training Room", "Str Training Room", Shop (StatTrainer ("Strength")))
+        let staroom = new Room(Map [], "Sta Training Room", "Sta Training Room", Shop (StatTrainer ("Stamina")))
 
         let eastgateroom = new Room(Map [], "East Gate", "East Gate", TravelRoom)
         let paladinroom = new Room(Map [], "Paladin Hall", "Paladin Hall", TravelRoom)
         let bridgeroom = new Room(Map [], "Bridge", "Bridge", TravelRoom)
 
-        let barbroom = new Room(Map [], "Barbarian Hall", "Barbarian Hall", RoomContents.Guild)
-        let armorroom = new Room(Map [], "Tembeg's Armor", "Tembeg's Armor", RoomContents.Shop)
+        // leather - jerkin / coat / full leather - 1.05 to 1.25 protection, 0 - 0.5 reduction, 30 - 300 loot
+        // light chain - shirt / suit / full light chain - 1.10 to 1.50 protection, 0.5 - 1.0 reduction, 100 - 1000 loot
+        // heavy chain - shirt / suit / full heavy chain - 1.20 to 2.00 protection, 1.0 - 1.5 reduction, 300 - 3000 loot
+        // light plate - breastplate / suit / full light plate - 1.40 to 3.00 protection, 1.5 - 2.0 reduction, 600 - 6000 loot
+        // heavy plate - breastplate / suit / full heavy plate - 2.00 to 6.00 protection, 2.0 - 2.5 reduction, 1000 - 10000 loot
+
+        // leather - leather coat - 1.15 protection, 0.2 reduction, 30 loot
+        let pl_leather_coat = { Ident = "Leather Coat"; Absorbance = 1.15; ResultReduction = 0.2; SkillName = "Leather" }
+        // light chain - light chain suit - 1.30 protection, 0.6 reduction, 100 loot
+        let pl_light_chain_suit = { Ident = "Light Chain Suit"; Absorbance = 1.30; ResultReduction = 0.6; SkillName = "Light Chain" }
+        // heavy chain - heavy chain armor - 1.60 protection, 1.1 reduction, 200 loot
+        let pl_heavy_chain_armor = { Ident = "Heavy Chain Armor"; Absorbance = 1.60; ResultReduction = 1.1; SkillName = "Heavy Chain" }
+        // light plate - light plate breastplate - 2.00 protection, 1.6 reduction, 350 loot
+        let pl_light_plate_armor = { Ident = "Light Plate Breastplate"; Absorbance = 2.00; ResultReduction = 1.6; SkillName = "Light Plate"}
+        // heavy plate - 
+
+        let barbroom = new Room(Map [], "Barbarian Hall", "Barbarian Hall", RoomContents.Guild (GuildLeveler (Guild.barbReqs)))
+        let armorroom = new Room(Map [], "Tembeg's Armor", "Tembeg's Armor", 
+                            RoomContents.Shop (EquipmentList 
+                                ([
+                                  (leather_coat, 30.0);
+
+                                
+                                
+                                ])
+        
+        // light edged - short sword - 10 end cost, 0.50 damage mod, 1.15 hit mod, 20 loot 
+        // medium edged - scimitar - 20 end cost, 1.00 damage mod, 1.10 hit mod, 40 loot
+        // heavy edged - broadsword - 30 end cost, 1.60 damage mod, 1.05 hit mod, 60 loot 
+        // two-handed edged - greatsword - 60 end cost, 3.5 damage mod, 1.00 hit mod, 100 loot
+        
+        // light blunt - cudgel - 20 end cost, 1.20 damage mod, 0.95 hit mod, 50 loot
+        // medium blunt - hammer - 40 end cost, 2.50 damage mod, 0.90 hit mod, 75 loot
+        // heavy blunt - ball and chain - 60 end cost, 3.80 damage mod, 0.85 hit mod, 1000 loot
+        // two-handed blunt - war mattock - 80 end cost, 6.00 damage mod, 0.75 hit mod, 125 loot
+
+        // brawling - gauntlet - 30 end cost, 1.50 damage mod, 1.00 hit mod, 30 loot
+
+        // short bow - short bow - 40 end cost, 1.80 damage mod, 1.20 hit mod, 30 loot
+        // long bow - longbow - 60 end cost, 3.00 damage mod, 1.00 hit mod, 60 loot
+        // composite bow - composite bow - 80 end cost, 4.20 damage mod, 0.95 hit mod, 80 loot
+        // light crossbow - light crossbow - 70 end cost, 3.75 damage mod, 0.95 hit mod, 70 loot
+        // heavy crossbow - heavy crossbow - 100 end cost, 6.00 damage mod, 0.90 hit mod, 125 loot
+        // sling - sling - 40 end cost, 2.00 damage mod, 0.90 hit mod, 10 loot
+        // staff sling - staff sling - 60 end cost, 3.00 damage mod, 0.80 hit mod, 25 loot
+        // halberd - halberd - 40 end cost, 1.50 damage mod, 1.25 hit mod, 80 loot
+        // pike - pike - 40 end cost, 1.00 damage mod, 1.50 hit mod, 80 loot 
+        // short staff - short staff - 20 end cost, 2.00 damage mod, 0.75 hit mod, 80 loot
+        // staff - staff - 40 end cost, 6.00 damage mod, 0.60 hit mod, 120 loot
+        
         let weaponroom = new Room(Map [], "Baerholt's Weapons", "Baerholt's Weapons", RoomContents.Shop)
 
         eelroom.Neighbors <- Map [("East", unarmedgobroom)]

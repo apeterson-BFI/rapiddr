@@ -27,11 +27,14 @@
           RightHand : Equipment;
           Torso : Equipment }
 
-     type ArmorData = 
+    type ArmorData = 
         { ArmorRanks : float; Gear : Armor }
 
-     type WeaponData = 
+    type WeaponData = 
         { WeaponRanks : float; Gear : Weapon }
 
-
+    type ShopContents = 
+        | EquipmentList of (float * Equipment) list
+        | StatTrainer of string
+        | GuildLeveler of GuildRequirements
 
