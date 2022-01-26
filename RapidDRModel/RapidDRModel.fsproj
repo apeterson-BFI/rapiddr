@@ -14,8 +14,10 @@
     <Compile Include="Equipment.fs" />
     <Compile Include="Unit.fs" />
     <Compile Include="BattleContext.fs" />
+    <Compile Include="Room.fs" />
     <Compile Include="SimParams.fs" />
-    <Compile Include="Library.fs" />
+    <Compile Include="Monster.fs" />
+    <Compile Include="Overseer.fs" />
   </ItemGroup>
 
   <ItemGroup>

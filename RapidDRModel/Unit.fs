@@ -70,6 +70,8 @@
 
         member val Equipped = equipped with get,set
 
+        member val Loot = 0.0 with get,set
+
         member this.UnitType = unitType
 
         member val Ident = ident with get,set
@@ -178,16 +180,21 @@
             let level = this.FindLevelFromReqs()
             let ltdps = 100.0 * level + level * (level + 1.0) / 2.0
 
+            let starttdps = 600.0
+
             let tdpsSpent = this.Statistics.TDPCost(Unit.DefaultStatistics)
 
-            wtdps + atdps + stdps + ltdps - tdpsSpent
+            starttdps + wtdps + atdps + stdps + ltdps - tdpsSpent
 
         member this.Pulse() = 
             this.WeaponSkills.Pulse this.Statistics.Wisdom this.Statistics.Intelligence this.Statistics.Discipline
             this.ArmorSkills.Pulse this.Statistics.Wisdom this.Statistics.Intelligence this.Statistics.Discipline
             this.SurvivalSKills.Pulse this.Statistics.Wisdom this.Statistics.Intelligence this.Statistics.Discipline
 
-        member this.Gain(name : string, softCapRank : float, hardCapRank : float, gainBits : float) =
+        member this.IncreaseStat (statName : string) =
+            this.Statistics.Increase this.TDPSFree statName
+
+        member this.Gain (name : string)  (softCapRank : float) (hardCapRank : float) (gainBits : float) =
             match this.TryFind name with
             | Some (sk : Skill) -> sk.Gain this.Statistics.Intelligence this.Statistics.Discipline softCapRank hardCapRank gainBits
             | None -> ()
@@ -231,6 +238,44 @@
             if this.Vitals.Endurance + enduDelta < 0.0 then false
             else this.AdjustEndurance enduDelta; true
 
+        member this.GainActiveWeapon (gainBits : float) (softCap : float) (hardCap : float) = 
+            let wdatao = this.GetWeapon ()
+
+            match wdatao with
+            | None -> ()
+            | Some wdata ->
+                this.Gain wdata.SkillName softCap hardCap gainBits
+
+        member this.GainActiveShield (gainBits : float) (softCap : float) (hardCap : float) = 
+            let sdatao = this.GetShield ()
+
+            match sdatao with
+            | None -> ()
+            | Some sdata ->
+                this.Gain "Shield" softCap hardCap gainBits
+
+        member this.GainActiveArmor (gainBits : float) (softCap : float) (hardCap : float) = 
+            let adatao = this.GetArmor ()
+
+            match adatao with
+            | None -> ()
+            | Some adata ->
+                this.Gain adata.SkillName softCap hardCap gainBits
+
+        member this.GainActiveParry (gainBits : float) (softCap : float) (hardCap : float) = 
+            let wdatao = this.GetWeapon ()
+            let sdatao = this.GetShield ()
+
+            match wdatao with
+            | None -> ()
+            | Some wdata ->
+                match sdatao with
+                | None -> this.Gain "Parry" softCap hardCap gainBits
+                | Some sdata -> ()
+
+        member this.GainEvasion (gainBits : float) (softCap : float) (hardCap : float) = 
+            this.Gain "Evasion" softCap hardCap gainBits
+
         static member DefaultStatistics = new Attributes(10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0)
 
         static member DefaultWeaponSkills = 
@@ -254,7 +299,9 @@
                  new Skill("Staff Sling", 0.0, Skill.Primary, 0.0);
                  new Skill("Halberd", 0.0, Skill.Primary, 0.0);
                  new Skill("Pike", 0.0, Skill.Primary, 0.0);
-                 new Skill("Parry", 0.0, Skill.Primary, 0.0)],
+                 new Skill("Parry", 0.0, Skill.Primary, 0.0);
+                 new Skill("Short Staff", 0.0, Skill.Primary, 0.0);
+                 new Skill("Staff", 0.0, Skill.Primary, 0.0)],
                  Skill.Primary)
 
         static member DefaultArmorSkills = 
@@ -286,7 +333,7 @@
             let ac = new Skillset(proto.ArmorSkills)
             let sc = new Skillset(proto.SurvivalSKills)
 
-            Unit(Unit.DefaultIdent, wc, ac, sc, na, Unit.DefaultVitals, proto.GuildRequirements, Unit.DefaultPortrait, proto.UnitType)
+            Unit(Unit.DefaultIdent, wc, ac, sc, na, proto.Vitals.MaxVitals (), proto.GuildRequirements, Unit.DefaultPortrait, proto.UnitType)
 
         static member CreateNewBaseUnit() = Unit(Unit.DefaultIdent, Unit.DefaultWeaponSkills, Unit.DefaultArmorSkills, Unit.DefaultSurvivalSkills, Unit.DefaultStatistics, Unit.DefaultVitals, Guild.barbReqs, Unit.DefaultPortrait, UnitType.PC)
             

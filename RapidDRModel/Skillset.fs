@@ -20,3 +20,6 @@
 
         member this.TryFind (name : string) = 
             List.tryFind (fun (x : Skill) -> x.Name = name) this.Skills
+
+        member this.SetAllSkillsRank (rank : float) = 
+            List.iter (fun (sk : Skill) -> sk.SetRank(rank)) this.Skills
