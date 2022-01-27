@@ -92,44 +92,89 @@
         // heavy chain - heavy chain armor - 1.60 protection, 1.1 reduction, 200 loot
         let pl_heavy_chain_armor = { Ident = "Heavy Chain Armor"; Absorbance = 1.60; ResultReduction = 1.1; SkillName = "Heavy Chain" }
         // light plate - light plate breastplate - 2.00 protection, 1.6 reduction, 350 loot
-        let pl_light_plate_armor = { Ident = "Light Plate Breastplate"; Absorbance = 2.00; ResultReduction = 1.6; SkillName = "Light Plate"}
-        // heavy plate - 
+        let pl_light_plate_armor = { Ident = "Light Plate Breastplate"; Absorbance = 2.00; ResultReduction = 1.6; SkillName = "Light Plate" }
+        // heavy plate - heavy plate armor - 2.50 protection, 2.1 reduction, 500 loot
+        let pl_heavy_plate_armor = { Ident = "Heavy Plate Armor"; Absorbance = 2.50; ResultReduction = 2.1; SkillName = "Heavy Plate" }
 
         let barbroom = new Room(Map [], "Barbarian Hall", "Barbarian Hall", RoomContents.Guild (GuildLeveler (Guild.barbReqs)))
         let armorroom = new Room(Map [], "Tembeg's Armor", "Tembeg's Armor", 
                             RoomContents.Shop (EquipmentList 
                                 ([
-                                  (leather_coat, 30.0);
-
-                                
-                                
-                                ])
+                                  (30.0, ArmorSlot (pl_leather_coat));
+                                  (100.0, ArmorSlot (pl_light_chain_suit));
+                                  (200.0, ArmorSlot (pl_heavy_chain_armor));
+                                  (350.0, ArmorSlot (pl_light_plate_armor));
+                                  (500.0, ArmorSlot (pl_heavy_plate_armor));
+                                  (20.0, Container ( [] ))
+                                ])))
         
         // light edged - short sword - 10 end cost, 0.50 damage mod, 1.15 hit mod, 20 loot 
+        let pl_short_sword = { Ident = "Short Sword"; DamageMod = 0.5; AccuracyMod = 1.15; SkillName = "Light Edged"; EnduranceCost = 10.0 }
         // medium edged - scimitar - 20 end cost, 1.00 damage mod, 1.10 hit mod, 40 loot
+        let pl_scimitar = { Ident = "Scimitar"; DamageMod = 1.0; AccuracyMod = 1.1; SkillName = "Medium Edged"; EnduranceCost = 20.0 }
         // heavy edged - broadsword - 30 end cost, 1.60 damage mod, 1.05 hit mod, 60 loot 
+        let pl_broadsword = { Ident = "Broadsword"; DamageMod = 1.6; AccuracyMod = 1.05; SkillName = "Heavy Edged"; EnduranceCost = 30.0 }
         // two-handed edged - greatsword - 60 end cost, 3.5 damage mod, 1.00 hit mod, 100 loot
+        let pl_greatsword = { Ident = "Greatsword"; DamageMod = 3.5; AccuracyMod = 1.00; SkillName = "Two-Handed Edged"; EnduranceCost = 60.0 }
         
         // light blunt - cudgel - 20 end cost, 1.20 damage mod, 0.95 hit mod, 50 loot
+        let pl_cudgel = { Ident = "Cudgel"; DamageMod = 1.20; AccuracyMod = 0.95; SkillName = "Light Blunt"; EnduranceCost = 20.0 }
         // medium blunt - hammer - 40 end cost, 2.50 damage mod, 0.90 hit mod, 75 loot
-        // heavy blunt - ball and chain - 60 end cost, 3.80 damage mod, 0.85 hit mod, 1000 loot
+        let pl_hammer = { Ident = "Hammer"; DamageMod = 2.5; AccuracyMod = 0.9; SkillName = "Medium Blunt"; EnduranceCost = 40.0 }
+        // heavy blunt - ball and chain - 60 end cost, 3.80 damage mod, 0.85 hit mod, 100 loot
+        let pl_ballandchain = { Ident = "Ball and Chain"; DamageMod = 3.0; AccuracyMod = 0.85; SkillName = "Heavy Blunt"; EnduranceCost = 60.0 }
         // two-handed blunt - war mattock - 80 end cost, 6.00 damage mod, 0.75 hit mod, 125 loot
+        let pl_warmattock = { Ident = "War Mattock"; DamageMod = 6.0; AccuracyMod = 0.75; SkillName = "Two-Handed Blunt"; EnduranceCost = 80.0 }
 
         // brawling - gauntlet - 30 end cost, 1.50 damage mod, 1.00 hit mod, 30 loot
-
+        let pl_gauntlet = { Ident = "Gauntlet"; DamageMod = 1.50; AccuracyMod = 1.00; SkillName = "Brawling"; EnduranceCost = 30.0 }
         // short bow - short bow - 40 end cost, 1.80 damage mod, 1.20 hit mod, 30 loot
+        let pl_shortbow = { Ident = "Short Bow"; DamageMod = 1.80; AccuracyMod = 1.20; SkillName = "Short Bow"; EnduranceCost = 40.0 }
         // long bow - longbow - 60 end cost, 3.00 damage mod, 1.00 hit mod, 60 loot
+        let pl_longbow = { Ident = "Longbow"; DamageMod = 3.00; AccuracyMod = 1.00; SkillName = "Longbow"; EnduranceCost = 60.0 }
         // composite bow - composite bow - 80 end cost, 4.20 damage mod, 0.95 hit mod, 80 loot
+        let pl_compbow = { Ident = "Composite Bow"; DamageMod = 4.20; AccuracyMod = 0.95; SkillName = "Composite Bow"; EnduranceCost = 80.0 }
         // light crossbow - light crossbow - 70 end cost, 3.75 damage mod, 0.95 hit mod, 70 loot
+        let pl_lightxbow = { Ident = "Light Crossbow"; DamageMod = 3.75; AccuracyMod = 0.95; SkillName = "Light Crossbow"; EnduranceCost = 70.0 }
         // heavy crossbow - heavy crossbow - 100 end cost, 6.00 damage mod, 0.90 hit mod, 125 loot
+        let pl_heavyxbow = { Ident = "Heavy Crossbow"; DamageMod = 6.00; AccuracyMod = 0.90; SkillName = "Heavy Crossbow"; EnduranceCost = 100.0 }
         // sling - sling - 40 end cost, 2.00 damage mod, 0.90 hit mod, 10 loot
+        let pl_sling = { Ident = "Sling"; DamageMod = 2.00; AccuracyMod = 0.90; SkillName = "Sling"; EnduranceCost = 40.0 }
         // staff sling - staff sling - 60 end cost, 3.00 damage mod, 0.80 hit mod, 25 loot
+        let pl_staffsling = { Ident = "Staff Sling"; DamageMod = 3.00; AccuracyMod = 0.80; SkillName = "Staff Sling"; EnduranceCost = 60.0 }
         // halberd - halberd - 40 end cost, 1.50 damage mod, 1.25 hit mod, 80 loot
+        let pl_halberd = { Ident = "Halberd";  DamageMod = 1.50; AccuracyMod = 1.25; SkillName = "Staff"; EnduranceCost = 40.0 }
         // pike - pike - 40 end cost, 1.00 damage mod, 1.50 hit mod, 80 loot 
+        let pl_pike = { Ident = "Pike"; DamageMod = 1.00; AccuracyMod = 1.50; SkillName = "Pike"; EnduranceCost = 40.0 }
         // short staff - short staff - 20 end cost, 2.00 damage mod, 0.75 hit mod, 80 loot
+        let pl_shortstaff = { Ident = "Short Staff"; DamageMod = 2.00; AccuracyMod = 0.75; SkillName = "Short Staff"; EnduranceCost = 20.0 }
         // staff - staff - 40 end cost, 6.00 damage mod, 0.60 hit mod, 120 loot
+        let pl_staff = { Ident = "Staff"; DamageMod = 6.00; AccuracyMod = 0.60; SkillName = "Staff"; EnduranceCost = 40.0 }
         
-        let weaponroom = new Room(Map [], "Baerholt's Weapons", "Baerholt's Weapons", RoomContents.Shop)
+        let weaponroom = new Room(Map [], "Baerholt's Weapons", "Baerholt's Weapons", 
+                                RoomContents.Shop (EquipmentList
+                                    ([
+                                        (20.0, WeaponSlot (pl_short_sword));
+                                        (40.0, WeaponSlot (pl_scimitar));
+                                        (60.0, WeaponSlot (pl_broadsword));
+                                        (100.0, WeaponSlot (pl_greatsword));
+                                        (50.0, WeaponSlot (pl_cudgel));
+                                        (75.0, WeaponSlot (pl_hammer));
+                                        (100.0, WeaponSlot (pl_ballandchain));
+                                        (125.0, WeaponSlot (pl_warmattock));
+                                        (30.0, WeaponSlot (pl_gauntlet));
+                                        (30.0, WeaponSlot (pl_shortbow));
+                                        (60.0, WeaponSlot (pl_longbow));
+                                        (80.0, WeaponSlot (pl_compbow));
+                                        (70.0, WeaponSlot (pl_lightxbow));
+                                        (125.0, WeaponSlot (pl_heavyxbow));
+                                        (10.0, WeaponSlot (pl_sling));
+                                        (25.0, WeaponSlot (pl_staffsling));
+                                        (80.0, WeaponSlot (pl_halberd));
+                                        (80.0, WeaponSlot (pl_pike));
+                                        (80.0, WeaponSlot (pl_shortstaff));
+                                        (120.0, WeaponSlot (pl_staff))
+                                    ])))
 
         eelroom.Neighbors <- Map [("East", unarmedgobroom)]
         unarmedgobroom.Neighbors <- Map [("West", eelroom); ("South", armedgobroom)]
