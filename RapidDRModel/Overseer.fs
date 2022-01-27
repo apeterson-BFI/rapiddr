@@ -2,6 +2,7 @@
     open System
     open NodaTime
     open System.Threading
+    open System.Runtime.InteropServices
 
     module Overseer = 
         let createMonsterRoom (monsterName : string) (roomName : string) (skillLevel : float) (statLevel : float) (weapon : Weapon) (armor : Armor) (shield : Armor option) (loot : float) (expgain : float) (offSoftCap : float) (offHardCap : float) (defSoftCap : float) (defHardCap : float) (spawnChance : float) (monsterLimit : int) (simParams : SimParams) = 
@@ -23,6 +24,8 @@
             (spawner, room)
 
         let outMessages = new Collections.Generic.Queue<string>()
+
+        let inMessages = new Collections.Generic.Queue<string>()
 
         let ratarmor = { Ident = "Rat Armor"; Absorbance = 1.0; ResultReduction = 0.0; SkillName = "Leather" }
         let jerkin = { Ident = "Leather Jerkin"; Absorbance = 1.02; ResultReduction = 0.1; SkillName = "Leather" }
@@ -204,6 +207,10 @@
                    (reaverroom, reaverspawn); (beisswurmroom, beisswurmspawn); (bloodwolfroom, bloodwolfspawn); 
                    (rocktrollroom, rocktrollspawn); (snowbeastroom, snowbeastspawn)]
 
+        let rooms = [eelroom; unarmedgobroom; introom; armedgobroom; westgateroom; charoom; disroom; bridgeroom; agiroom; refroom; 
+                     armorroom; weaponroom; ratroom; strroom; staroom; barbroom; paladinroom; wisroom; cougarroom; eastgateroom;
+                     reaverroom; bloodwolfroom; snowbeastroom]
+
         let doMainTick (o : obj) = 
             spr
             |> List.iter (fun (r : Room, sp : MonsterSpawner) -> 
@@ -218,8 +225,10 @@
                                             u.Vitals.Health <- sparams.RespawnHealthPct * u.Vitals.HealthMax
                                             u.Vitals.Endurance <- sparams.RespawnEndurancePct * u.Vitals.EnduranceMax
                                             outMessages.Enqueue (sprintf "%s has respawned." u.Ident)
-                                          )
-                                          
+                                          ))
+
+            rooms
+            |> List.iter (fun (r : Room) ->
                             r.Travelers
                             |> List.iter (fun (u : Unit) -> 
                                                 u.AdjustHealth (sparams.HealthPctRecovery * u.Vitals.HealthMax)
@@ -228,12 +237,86 @@
         let doPulseTick (o : obj) = 
             spr
             |> List.iter (fun (r : Room, sp : MonsterSpawner) ->
-                            r.Travelers
-                            |> List.iter (fun (u : Unit) -> u.Pulse outMessages)
-
                             sp.BattleContext.Units
                             |> List.iter (fun (u : Unit) -> u.Pulse outMessages)
                          )
+
+            rooms
+            |> List.iter (fun (r : Room) ->
+                            r.Travelers
+                            |> List.iter (fun (u : Unit) -> u.Pulse outMessages))
+
+        let mutable pc_ident = "blank"
+
+        let dispatchCommand (line : string) = 
+            if line.StartsWith("NEW ") then
+                let nident = line.Substring(4)
+                let unit = Unit.CreateNewBaseUnit ()
+                unit.Ident <- nident
+                pc_ident <- nident
+                outMessages.Enqueue (sprintf "Character Created: IDENT %s" pc_ident)
+            elif (line.ToLower() = "retreat" || line.ToLower() = "retr") then
+                spr
+                |> List.iter (fun (r : Room, sp : MonsterSpawner) -> 
+                                let pco = 
+                                    sp.BattleContext.Units
+                                    |> List.filter (fun (u : Unit) -> u.Ident = pc_ident)
+                                    |> List.tryHead
+
+                                match pco with
+                                | None -> ()
+                                | Some pc -> r.LeaveBattle pc_ident
+                             )
+            elif (line.ToLower() = "advance" || line.ToLower() = "adv") then
+                spr
+                |> List.iter (fun (r : Room, sp : MonsterSpawner) -> 
+                                let pco = 
+                                    r.Travelers
+                                    |> List.filter (fun (u : Unit) -> u.Ident = pc_ident)
+                                    |> List.tryHead
+
+                                match pco with
+                                | None -> ()
+                                | Some pc -> r.EnterBattle pc_ident
+                             )
+            elif (line = "north" || line = "n")
+                rooms
+                |> List.iter (fun (r : Room) -> 
+                                let pco = 
+                                    r.Travelers
+                                    |> List.filter (fun (u : Unit) -> u.Ident = pc_ident)
+                                    |> List.tryHead
+
+                                match pco with
+                                | None -> ()
+                                | Some pc -> r.Move pc_ident "North"
+                             )
+            elif (line = "east" || line = "e")
+                rooms
+                |> List.iter (fun (r : Room) -> 
+                                let pco = 
+                                    r.Travelers
+                                    |> List.filter (fun (u : Unit) -> u.Ident = pc_ident)
+                                    |> List.tryHead
+
+                                match pco with
+                                | None -> ()
+                                | Some pc -> r.Move pc_ident "North"
+                             )
+            elif (line = "south" || line = "s")
+                rooms
+                |> List.iter (fun (r : Room) -> 
+                                let pco = 
+                                    r.Travelers
+                                    |> List.filter (fun (u : Unit) -> u.Ident = pc_ident)
+                                    |> List.tryHead
+
+                                match pco with
+                                | None -> ()
+                                | Some pc -> r.Move pc_ident "North"
+                            )
+
+
 
         let run () = 
             let o = new obj()
@@ -244,3 +327,11 @@
             while true do
                 if BattleContext.CombatResults.Count > 0 then (printf "%s" (BattleContext.CombatResults.Dequeue ()))
                 if outMessages.Count > 0 then (printf "%s" (outMessages.Dequeue ()))
+
+                if Console.KeyAvailable 
+                then
+                    let line = Console.ReadLine()
+                    dispatchCommand line
+
+            
+                
