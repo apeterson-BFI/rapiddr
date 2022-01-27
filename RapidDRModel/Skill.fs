@@ -78,9 +78,11 @@
         member this.SetRank (rank : float) =
             this.SkillBits <- calcBitsFromRank rank
 
-        member this.Pulse (wisdom : float) (intel : float) (disc : float) =
+        member this.Pulse (queue : Collections.Generic.Queue<string>) (wisdom : float) (intel : float) (disc : float) =
             let bp = calcPulseBits this.SkillsetType wisdom intel disc this.SkillRanks
             
+            let prank = int this.SkillRanks
+
             if bp <= this.PoolBits 
             then 
                 this.SkillBits <- this.SkillBits + bp
@@ -88,6 +90,10 @@
             else
                 this.SkillBits <- this.SkillBits + this.PoolBits
                 this.PoolBits <- 0.0
+
+            let nrank = int this.SkillRanks
+
+            if nrank > prank then queue.Enqueue (sprintf "%s has ranked up (now %i)!" this.Name nrank)
 
         member this.Gain (intel : float) (disc : float) (softCapRank : float) (hardCapRank : float) (gainBits : float) = 
             let gp = calcEffectiveBitGain this.SkillRanks gainBits softCapRank hardCapRank

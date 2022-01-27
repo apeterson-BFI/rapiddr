@@ -5,9 +5,6 @@
 
     module Overseer = 
         let createMonsterRoom (monsterName : string) (roomName : string) (skillLevel : float) (statLevel : float) (weapon : Weapon) (armor : Armor) (shield : Armor option) (loot : float) (expgain : float) (offSoftCap : float) (offHardCap : float) (defSoftCap : float) (defHardCap : float) (spawnChance : float) (monsterLimit : int) (simParams : SimParams) = 
-            
-
-
             let battleContext = new BattleContext( [] )
             let room = new Room(Map [], roomName, roomName, RoomContents.BattleRoom (battleContext))
             let unit = new Unit(monsterName, Unit.DefaultWeaponSkills, Unit.DefaultArmorSkills, Unit.DefaultSurvivalSkills, new Attributes(statLevel, statLevel, statLevel, statLevel, statLevel, statLevel, statLevel, statLevel), Unit.DefaultVitals, Guild.barbReqs, 
@@ -24,6 +21,8 @@
             let spawner = new MonsterSpawner(monster, battleContext, spawnChance, monsterLimit, simParams)
 
             (spawner, room)
+
+        let outMessages = new Collections.Generic.Queue<string>()
 
         let ratarmor = { Ident = "Rat Armor"; Absorbance = 1.0; ResultReduction = 0.0; SkillName = "Leather" }
         let jerkin = { Ident = "Leather Jerkin"; Absorbance = 1.02; ResultReduction = 0.1; SkillName = "Leather" }
@@ -218,6 +217,7 @@
                                             u.Vitals.Status <- Alive
                                             u.Vitals.Health <- sparams.RespawnHealthPct * u.Vitals.HealthMax
                                             u.Vitals.Endurance <- sparams.RespawnEndurancePct * u.Vitals.EnduranceMax
+                                            outMessages.Enqueue (sprintf "%s has respawned." u.Ident)
                                           )
                                           
                             r.Travelers
@@ -229,10 +229,10 @@
             spr
             |> List.iter (fun (r : Room, sp : MonsterSpawner) ->
                             r.Travelers
-                            |> List.iter (fun (u : Unit) -> u.Pulse ())
+                            |> List.iter (fun (u : Unit) -> u.Pulse outMessages)
 
                             sp.BattleContext.Units
-                            |> List.iter (fun (u : Unit) -> u.Pulse ())
+                            |> List.iter (fun (u : Unit) -> u.Pulse outMessages)
                          )
 
         let run () = 
@@ -241,5 +241,6 @@
             let main_timer = new System.Threading.Timer((new TimerCallback(doMainTick)), o, 100, int (sparams.MainFreq.TotalMilliseconds))
             let pulse_timer = new System.Threading.Timer((new TimerCallback(doPulseTick)), o, 150, int (sparams.PulseFreq.TotalMilliseconds))
 
-            while true do ()
-
+            while true do
+                if BattleContext.CombatResults.Count > 0 then (printf "%s" (BattleContext.CombatResults.Dequeue ()))
+                if outMessages.Count > 0 then (printf "%s" (outMessages.Dequeue ()))
