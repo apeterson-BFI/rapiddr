@@ -2,7 +2,8 @@
     open System
     open NodaTime
     open MathNet.Numerics.Distributions
-
+    open System.IO
+    
     type DefenseSet = 
         | ShieldDefense of ArmorData * float
         | ParryDefense of WeaponData * float * float
@@ -12,6 +13,9 @@
         | Hit of string * float
 
     type BattleContext(units : Unit list) = 
+
+        static member CombatResults = new Collections.Generic.Queue<string>()
+
         static member private Roll = new ContinuousUniform(0.0, 1.0)
 
         static member private HitTable = 
@@ -129,6 +133,10 @@
             let final_dmg = after_ev_dmg * table_dmgmod / armor_absorbance
 
             def_unit.Vitals.Health <- def_unit.Vitals.Health - final_dmg
+
+            BattleContext.CombatResults.Enqueue (sprintf "%s attacked %s (HL: %f Dealt: %f)" att_unit.Ident def_unit.Ident tableroll final_dmg)
+            if final_dmg > def_unit.Vitals.Health then BattleContext.CombatResults.Enqueue (sprintf "%s has slain %s" att_unit.Ident def_unit.Ident)
+
             ()
 
         member this.Join (u : Unit) = 

@@ -186,10 +186,10 @@
 
             starttdps + wtdps + atdps + stdps + ltdps - tdpsSpent
 
-        member this.Pulse() = 
-            this.WeaponSkills.Pulse this.Statistics.Wisdom this.Statistics.Intelligence this.Statistics.Discipline
-            this.ArmorSkills.Pulse this.Statistics.Wisdom this.Statistics.Intelligence this.Statistics.Discipline
-            this.SurvivalSKills.Pulse this.Statistics.Wisdom this.Statistics.Intelligence this.Statistics.Discipline
+        member this.Pulse (queue : Collections.Generic.Queue<string>) = 
+            this.WeaponSkills.Pulse queue this.Statistics.Wisdom this.Statistics.Intelligence this.Statistics.Discipline
+            this.ArmorSkills.Pulse queue this.Statistics.Wisdom this.Statistics.Intelligence this.Statistics.Discipline
+            this.SurvivalSKills.Pulse queue this.Statistics.Wisdom this.Statistics.Intelligence this.Statistics.Discipline
 
         member this.IncreaseStat (statName : string) =
             this.Statistics.Increase this.TDPSFree statName
