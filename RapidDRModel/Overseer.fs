@@ -279,7 +279,7 @@
                                 | None -> ()
                                 | Some pc -> r.EnterBattle pc_ident
                              )
-            elif (line = "north" || line = "n")
+            elif (line = "north" || line = "n") then
                 rooms
                 |> List.iter (fun (r : Room) -> 
                                 let pco = 
@@ -291,7 +291,7 @@
                                 | None -> ()
                                 | Some pc -> r.Move pc_ident "North"
                              )
-            elif (line = "east" || line = "e")
+            elif (line = "east" || line = "e") then
                 rooms
                 |> List.iter (fun (r : Room) -> 
                                 let pco = 
@@ -303,7 +303,7 @@
                                 | None -> ()
                                 | Some pc -> r.Move pc_ident "North"
                              )
-            elif (line = "south" || line = "s")
+            elif (line = "south" || line = "s") then
                 rooms
                 |> List.iter (fun (r : Room) -> 
                                 let pco = 
@@ -315,6 +315,37 @@
                                 | None -> ()
                                 | Some pc -> r.Move pc_ident "North"
                             )
+            elif (line = "west" || line = "w") then
+                rooms
+                |> List.iter (fun (r: Room) ->
+                                let pco = 
+                                    r.Travelers
+                                    |> List.filter (fun (u : Unit) -> u.Ident = pc_ident)
+                                    |> List.tryHead
+
+                                match pco with
+                                | None -> ()
+                                | Some pc -> r.Move pc_ident "West"
+                            )
+            elif line.StartsWith("buy ") then
+            {
+                let item = line.Substring(4);
+
+                rooms
+                |> List.iter (fun (r : Room) ->
+                                let pco = 
+                                    r.Travelers
+                                    |> List.filter (fun (u : Unit) -> u.Ident = pc_ident)
+                                    |> List.tryHead
+
+                                match pco with
+                                | None -> ()
+                                | Some pc ->
+                                    match r with
+                                    | Shop(EquipmentList (eql) -> 
+                                    | _ -> ()
+
+            }
 
 
 
